@@ -1,5 +1,5 @@
 /**
-*ALTER/PONG V0.1
+*ALTER/PONG V0.2
 *DONE BY EDDY IKHLEF USING PROCESS
 *rules: 
 * player(left) q to move up, w to move down
@@ -9,48 +9,110 @@
 */
 
 //VARIABLES
+//version
+String version = "V0.2";
 //player 1 & 2 position, only y + score
-int p1 = 360;
-int p2 = 360;
-int s1 = 0;
-int s2 = 0;
-//ball position
-int bx = 640;
-int by = 360;
-//ball moves
-int dx = 0;
-int dy = 0;
-//ball size
-int bsize = 16;
+int p1, p2, s1, s2;
+//ball position bx by / ball moves dx dy / ball size bsize
+int bx, by, dx, dy, bsize;
 //ball buffer
-int buffer = 1;
-int bufferBase = 4;
-boolean canHit = true;
-
+int buffer, bufferBase;
+//canHit the ball / start the game / mode of game / startGame after pressing ENTER
+boolean canHit, start, startGame;
+//mode 1 = 1P, 2 = 2P / launchTimer pseudoTimer
+int mode, launchTimer;
+//-------------------------------------------------------------------------------------------------------------------------
+//START TITLE SCREEN
+//-------------------------------------------------------------------------------------------------------------------------
 //initialize setup
 void setup() {
+  //INITIALIZE VARIABLES
+  p1 = 360;
+  p2 = 360;
+  s1 = 0;
+  s2 = 0;
+  bx = 640;
+  by = 360;
+  dx = 0;
+  dy = 0;
+  bsize = 16;
+  buffer = 1;
+  bufferBase = 4;
+  canHit = true;
+  start = false;
+  mode = -1;
+  launchTimer = 0;
+  startGame = false;
   //create window with a size of 1280*720
   size(1280, 720);
-  
-  //chose direction for ball
-  while (dx == 0 || dy == 0) {
-    dx = int(random(-bufferBase, bufferBase));
-    dy = int(random(-bufferBase, bufferBase));
-  }
-   
-  
-  //draw ball and players 1 and 2
-  ellipse(bx, by, bsize, bsize);
-  rect(16, p1, 10, 100);
-  rect(1280-26, p2, 10, 100);
+  //draw text
+  textSize(100);
+  strokeWeight(1);
+  background(255);
+  fill(0);
+  line(640, 0, 640, 1280);
+  fill(50,50,50);
+  textAlign(CENTER, CENTER);
+  text("ALTER/PONG", 628, 30); 
+  textSize(100);
+  text("P1 V ORDI", 320, 360);
+  text("P1 V P2", 960, 360);
+  textSize(50);
+  text("<coming SOON>", 320, 480);
+  text("<press RIGHT ARROW>", 960, 480);
+  fill(0);
+  textSize(25);
+  text("<"+version+" - 2019 - Eddy Ikhlef>\nm-o-k-a.github.io", 628, 680); 
+  color(0);
 }
 
 void draw() {
-  clean();
-  drawScore();
-  checkColission();
-  ballMove();
-  playerMoves();
+  if (start == true && mode >= 0) {
+    strokeWeight(1);
+    clean();
+    drawScore();
+    checkColission();
+    if (startGame == false) {
+      textSize(25);
+      text("<press ENTER to start>", 628, 680);
+      if (keyCode == ENTER) { startGame = true; }
+    }
+    else {
+      ballMove();
+      playerMoves();
+    }
+    if (key == 'r') { color(0); clear(); setup(); }
+ }
+ else {
+   //title screen select
+   if (keyCode == RIGHT && launchTimer == 0) { 
+     mode = 2;
+     color(0);
+     launch();
+   }
+ }
+ 
+ //TRANSITION DRAW
+ if (launchTimer > 0) {
+   color(0);
+   strokeWeight(18);
+   line(0, (launchTimer*16)-16, 1280, (launchTimer*16)-16); 
+   launchTimer++;
+   if (launchTimer >= 46) {
+     //chose direction for ball
+     while (dx == 0 || dy == 0) {
+      dx = int(random(-bufferBase, bufferBase));
+       dy = int(random(-bufferBase, bufferBase));
+     }
+    //draw ball and players 1 and 2
+    ellipse(bx, by, bsize, bsize);
+    rect(16, p1, 10, 100);
+    rect(1280-26, p2, 10, 100);
+    //start game
+    launchTimer = 0;
+    start = true;
+}
+ }
 }
 
 //SUB-FUNCTIONS
@@ -116,10 +178,15 @@ void drawScore() {
   fill(255);
 }
 
-
 void clean() {
  background(0); 
  //draw the separator line
  stroke(255,255,255);
  line(640, 0, 640, 1280);
+}
+
+void launch() {
+  //transition
+  launchTimer = 1;
+  color(0);
 }
