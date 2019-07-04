@@ -1,29 +1,139 @@
-/**
-*ALTER/PONG V0.2
+//libraries
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+//-------------------------------------------------------------------------------------------------------------------------//
+/*
+*ALTER/PONG V0.3
 *DONE BY EDDY IKHLEF USING PROCESS
 *rules: 
 * player(left) q to move up, w to move down
 * player(right) up to move up, down to move down
+* r to stop and go back to title screen (saved scores)
 *ALTERNATIVE PONG, each player can't move after send the ball until the other player touch it
 *Adding with unstopable platform, and ball who take speed, it make the pong harder than ever !
 */
-
-//VARIABLES
+//-------------------------------------------------------------------------------------------------------------------------//
+//STARTING VARIABLES
 //version
-String version = "V0.2";
+String version = "V0.3";
 //player 1 & 2 position, only y + score
 int p1, p2, s1, s2;
 //ball position bx by / ball moves dx dy / ball size bsize
 int bx, by, dx, dy, bsize;
-//ball buffer
-int buffer, bufferBase;
+//ball buffer ordiLuck
+int buffer, bufferBase, ordiLuck;
 //canHit the ball / start the game / mode of game / startGame after pressing ENTER
 boolean canHit, start, startGame;
 //mode 1 = 1P, 2 = 2P / launchTimer pseudoTimer
 int mode, launchTimer;
-//-------------------------------------------------------------------------------------------------------------------------
+//create computer opponent
+Robot robot;
+//-------------------------------------------------------------------------------------------------------------------------//
+//FUNCTION USED IN THE PROGRAM
+//-------------------------------------------------------------------------------------------------------------------------//
+//CHECKCOLISSION() = collision with players and border
+void checkColission() {
+  //collision with players
+  if ((bx > 16 && bx <= 26-dx) && (by > p1-8 && by < p1+100 && canHit == true)) {
+    canHit = false;
+    dx = bufferBase;
+  }
+  if ((bx > 1280-26 && bx <= 1280-18+dx) && (by > p2-8 && by < p2+100 && canHit == true)) {
+    canHit = false;
+    dx = -bufferBase;
+  }
+  
+  //collision with border
+  if (bx < bsize && canHit == true)  { canHit = false; dx = bufferBase; buffer = 0; ballMove(); s2++;}  
+  else if (bx > 1280-bsize && canHit == true)  { canHit = false; dx = -bufferBase; buffer = 0; ballMove(); s1++;}  
+  if (by < bsize || by > 719-bsize)  { dy = -dy; buffer++; }
+}
+
+//BALLMOVE() - Move the ball and bounce on edge, check when it is in the "goal zone" and change speed
+void ballMove() {
+  //update can hit
+  if (bx >= 36 && bx <= 1280-36) { canHit = true; }
+  //update position
+  if (dx < 0 ) { bx += dx - buffer; }
+  else { bx += dx + buffer; }
+   if (dy < 0 ) { by += dy - buffer; }
+  else { by += dy + buffer; }
+  //DEBUG BORDER
+  if (by > 720) { by = 718; ballMove();}
+  //draw
+  fill(255);
+  ellipse(bx, by, bsize, bsize);
+}
+
+//PLAYERMOVES()
+void playerMoves() {
+  fill(50, 50, 50);
+  //update player 1
+  if (dx < 0) {
+    fill(255);
+    if (key == 'q') { if (p1 > 0) { p1 -= bufferBase*2; } }
+    if (key == 'w') { if (p1 < 720-100) { p1 += bufferBase*2; } }
+  }
+  rect(16, p1, 10, 100);
+  //update player 2
+  if (mode == 2) { //ONLY P2 VERSION
+    fill(50, 50, 50);
+    if (dx > 0) {
+      fill(255);
+      if (keyCode == UP) { if (p2 > 0) { p2 -= bufferBase*2; } }
+      if (keyCode == DOWN) { if (p2 < 720-100) { p2 += bufferBase*2; } }
+    }
+  }
+  else if (mode == 1 && dx > 0) { //ONLY P1 VERSION
+    fill(255);
+    //not cheated move
+    if (int(random(0,25)) >= ordiLuck) {
+      if (p2 > by) {
+        robot.keyPress(KeyEvent.VK_UP);
+      }
+      if (p2 <= by) {
+        robot.keyPress(KeyEvent.VK_DOWN);
+      }
+    }
+    if (keyCode == UP) { if (p2 > 0) { p2 -= bufferBase*2; } }
+    if (keyCode == DOWN) { if (p2 < 720-100) { p2 += bufferBase*2; } }
+    }
+  else if (mode == 1) { fill(50, 50, 50); }
+  rect(1280-26, p2, 10, 100);
+}
+
+//DRAWSCORE() Draw the gui and the scores
+void drawScore() {
+  textSize(100);
+  fill(50,50,50);
+  textAlign(CENTER, CENTER);
+  text("ALTER/PONG", 628, 30); 
+  textSize(255);
+  text(s1, 320, 360);
+  text(s2, 960, 360);
+  fill(255);
+  //TODO - DRAW HIGHSCORE
+}
+
+//CLEAN() - Clean the screen function
+void clean() {
+ background(0); 
+ //draw the separator line
+ stroke(255,255,255);
+ line(640, 0, 640, 1280);
+}
+
+//LAUNCH() - Start the game scene
+void launch() {
+  //transition
+  launchTimer = 1;
+  //set transition color to black
+  color(0);
+}
+//-------------------------------------------------------------------------------------------------------------------------//
 //START TITLE SCREEN
-//-------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------//
 //initialize setup
 void setup() {
   //INITIALIZE VARIABLES
@@ -41,8 +151,12 @@ void setup() {
   canHit = true;
   start = false;
   mode = -1;
+  ordiLuck = int(random(1, 5));
   launchTimer = 0;
   startGame = false;
+  //create robot
+  try { robot = new Robot(); } 
+  catch (Exception e) { e.printStackTrace(); exit(); }
   //create window with a size of 1280*720
   size(1280, 720);
   //draw text
@@ -58,14 +172,16 @@ void setup() {
   text("P1 V ORDI", 320, 360);
   text("P1 V P2", 960, 360);
   textSize(50);
-  text("<coming SOON>", 320, 480);
+  text("<press LEFT ARROW>", 320, 480);
   text("<press RIGHT ARROW>", 960, 480);
   fill(0);
   textSize(25);
   text("<"+version+" - 2019 - Eddy Ikhlef>\nm-o-k-a.github.io", 628, 680); 
-  color(0);
 }
 
+//-------------------------------------------------------------------------------------------------------------------------//
+//MAIN LOOP: DRAW THE GAME
+//-------------------------------------------------------------------------------------------------------------------------//
 void draw() {
   if (start == true && mode >= 0) {
     strokeWeight(1);
@@ -90,11 +206,15 @@ void draw() {
      color(0);
      launch();
    }
+   if (keyCode == LEFT && launchTimer == 0) { 
+     mode = 1;
+     color(0);
+     launch();
+   }
  }
  
  //TRANSITION DRAW
  if (launchTimer > 0) {
-   color(0);
    strokeWeight(18);
    line(0, (launchTimer*16)-16, 1280, (launchTimer*16)-16); 
    launchTimer++;
@@ -113,80 +233,4 @@ void draw() {
     start = true;
 }
  }
-}
-
-//SUB-FUNCTIONS
-void checkColission() {
-  //collision with players
-  if ((bx > 16 && bx <= 26-dx) && (by > p1 && by < p1+100 && canHit == true)) {
-    canHit = false;
-    dx = bufferBase;
-  }
-  if ((bx > 1280-26 && bx <= 1280-18+dx) && (by > p2 && by < p2+100 && canHit == true)) {
-    canHit = false;
-    dx = -bufferBase;
-  }
-  
-  //collision with border
-  if (bx < bsize && canHit == true)  { canHit = false; dx = bufferBase; buffer = 0; ballMove(); s2++;}  
-  else if (bx > 1280-bsize && canHit == true)  { canHit = false; dx = -bufferBase; buffer = 0; ballMove(); s1++;}  
-  if (by < bsize || by > 719-bsize)  { dy = -dy; buffer++; }
-}
-
-void ballMove() {
-  //update can hit
-  if (bx >= 36 && bx <= 1280-36) { canHit = true; }
-  //update position
-  if (dx < 0 ) { bx += dx - buffer; }
-  else { bx += dx + buffer; }
-   if (dy < 0 ) { by += dy - buffer; }
-  else { by += dy + buffer; }
-  //DEBUG BORDER
-  if (by > 720) { by = 718; ballMove();}
-  //draw
-  fill(255);
-  ellipse(bx, by, bsize, bsize);
-}
-
-void playerMoves() {
-  fill(50, 50, 50);
-  //update player 1
-  if (dx < 0) {
-    fill(255);
-    if (key == 'q') { if (p1 > 0) { p1 -= bufferBase*2; } }
-    if (key == 'w') { if (p1 < 720-100) { p1 += bufferBase*2; } }
-  }
-  rect(16, p1, 10, 100);
-  //update player 2
-  fill(50, 50, 50);
-  if (dx > 0) {
-    fill(255);
-    if (keyCode == UP) { if (p2 > 0) { p2 -= bufferBase*2; } }
-    if (keyCode == DOWN) { if (p2 < 720-100) { p2 += bufferBase*2; } }
-  }
-  rect(1280-26, p2, 10, 100);
-}
-
-void drawScore() {
-  textSize(100);
-  fill(50,50,50);
-  textAlign(CENTER, CENTER);
-  text("ALTER/PONG", 628, 30); 
-  textSize(255);
-  text(s1, 320, 360);
-  text(s2, 960, 360);
-  fill(255);
-}
-
-void clean() {
- background(0); 
- //draw the separator line
- stroke(255,255,255);
- line(640, 0, 640, 1280);
-}
-
-void launch() {
-  //transition
-  launchTimer = 1;
-  color(0);
 }

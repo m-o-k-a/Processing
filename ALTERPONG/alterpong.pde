@@ -1,38 +1,45 @@
+//libraries
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 //-------------------------------------------------------------------------------------------------------------------------//
 /*
-*ALTER/PONG V0.2
+*ALTER/PONG V0.3
 *DONE BY EDDY IKHLEF USING PROCESS
 *rules: 
 * player(left) q to move up, w to move down
 * player(right) up to move up, down to move down
+* r to stop and go back to title screen (saved scores)
 *ALTERNATIVE PONG, each player can't move after send the ball until the other player touch it
 *Adding with unstopable platform, and ball who take speed, it make the pong harder than ever !
 */
 //-------------------------------------------------------------------------------------------------------------------------//
 //STARTING VARIABLES
 //version
-String version = "V0.2";
+String version = "V0.3";
 //player 1 & 2 position, only y + score
 int p1, p2, s1, s2;
 //ball position bx by / ball moves dx dy / ball size bsize
 int bx, by, dx, dy, bsize;
-//ball buffer
-int buffer, bufferBase;
+//ball buffer ordiLuck
+int buffer, bufferBase, ordiLuck;
 //canHit the ball / start the game / mode of game / startGame after pressing ENTER
 boolean canHit, start, startGame;
 //mode 1 = 1P, 2 = 2P / launchTimer pseudoTimer
 int mode, launchTimer;
+//create computer opponent
+Robot robot;
 //-------------------------------------------------------------------------------------------------------------------------//
 //FUNCTION USED IN THE PROGRAM
 //-------------------------------------------------------------------------------------------------------------------------//
 //CHECKCOLISSION() = collision with players and border
 void checkColission() {
   //collision with players
-  if ((bx > 16 && bx <= 26-dx) && (by > p1 && by < p1+100 && canHit == true)) {
+  if ((bx > 16 && bx <= 26-dx) && (by > p1-8 && by < p1+100 && canHit == true)) {
     canHit = false;
     dx = bufferBase;
   }
-  if ((bx > 1280-26 && bx <= 1280-18+dx) && (by > p2 && by < p2+100 && canHit == true)) {
+  if ((bx > 1280-26 && bx <= 1280-18+dx) && (by > p2-8 && by < p2+100 && canHit == true)) {
     canHit = false;
     dx = -bufferBase;
   }
@@ -78,9 +85,21 @@ void playerMoves() {
       if (keyCode == DOWN) { if (p2 < 720-100) { p2 += bufferBase*2; } }
     }
   }
-  else { //ONLY P1 VERSION
-    //TODO MODE ONE PLAYER
-  }
+  else if (mode == 1 && dx > 0) { //ONLY P1 VERSION
+    fill(255);
+    //not cheated move
+    if (int(random(0,25)) >= ordiLuck) {
+      if (p2 > by) {
+        robot.keyPress(KeyEvent.VK_UP);
+      }
+      if (p2 <= by) {
+        robot.keyPress(KeyEvent.VK_DOWN);
+      }
+    }
+    if (keyCode == UP) { if (p2 > 0) { p2 -= bufferBase*2; } }
+    if (keyCode == DOWN) { if (p2 < 720-100) { p2 += bufferBase*2; } }
+    }
+  else if (mode == 1) { fill(50, 50, 50); }
   rect(1280-26, p2, 10, 100);
 }
 
@@ -109,6 +128,7 @@ void clean() {
 void launch() {
   //transition
   launchTimer = 1;
+  //set transition color to black
   color(0);
 }
 //-------------------------------------------------------------------------------------------------------------------------//
@@ -131,8 +151,12 @@ void setup() {
   canHit = true;
   start = false;
   mode = -1;
+  ordiLuck = int(random(1, 5));
   launchTimer = 0;
   startGame = false;
+  //create robot
+  try { robot = new Robot(); } 
+  catch (Exception e) { e.printStackTrace(); exit(); }
   //create window with a size of 1280*720
   size(1280, 720);
   //draw text
@@ -148,12 +172,11 @@ void setup() {
   text("P1 V ORDI", 320, 360);
   text("P1 V P2", 960, 360);
   textSize(50);
-  text("<coming SOON>", 320, 480);
+  text("<press LEFT ARROW>", 320, 480);
   text("<press RIGHT ARROW>", 960, 480);
   fill(0);
   textSize(25);
   text("<"+version+" - 2019 - Eddy Ikhlef>\nm-o-k-a.github.io", 628, 680); 
-  color(0);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------//
@@ -183,11 +206,15 @@ void draw() {
      color(0);
      launch();
    }
+   if (keyCode == LEFT && launchTimer == 0) { 
+     mode = 1;
+     color(0);
+     launch();
+   }
  }
  
  //TRANSITION DRAW
  if (launchTimer > 0) {
-   color(0);
    strokeWeight(18);
    line(0, (launchTimer*16)-16, 1280, (launchTimer*16)-16); 
    launchTimer++;
