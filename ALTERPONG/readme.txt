@@ -1,3 +1,5 @@
+![alt text](https://www.noelshack.com/2019-27-6-1562414318-pong0.png)
+![alt text](https://www.noelshack.com/2019-27-6-1562414318-pong1.png)
 /*
 *ALTER/PONG V0.4
 *DONE BY EDDY IKHLEF USING PROCESS
