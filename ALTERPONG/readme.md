@@ -27,7 +27,11 @@ Adding with unstopable platform, and ball who take speed, it make the pong harde
 *Computer Difficulties<br>
 <br>
 *Upcoming in V1.0<br>
-*???<br>
+*Creation on new modes for the futures version: planned:<br>
+*classic pong mode
+*initial D mode
+*Double Ball Mode
+*(indeed, each mode will have it's own highscore)
 <br>
 <hr>
 <br>
