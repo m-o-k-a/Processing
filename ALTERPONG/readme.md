@@ -4,9 +4,9 @@
 *ALTER/PONG V0.4<br>
 *DONE BY EDDY IKHLEF USING PROCESS<br>
 *rules:<br>
-* player(left) q to move up, w to move down<br>
-* player(right) up to move up, down to move down<br>
-* r to stop and go back to title screen (saved scores)<br>
+*player(left) q to move up, w to move down<br>
+*player(right) up to move up, down to move down<br>
+*r to stop and go back to title screen (saved scores)<br>
 *ALTERNATIVE PONG, each player can't move after send the ball until the other player touch it<br>
 *Adding with unstopable platform, and ball who take speed, it make the pong harder than ever !<br>
 */<br>
