@@ -22,9 +22,14 @@ public class ALTERPONG extends PApplet {
 
 
 
+//Load Scores
+File data = new File("data.bin");
+//value 0, 1 for player score in solo mode, 2 and 3 for the two player mode
+byte v0, v1, v2, v3 = 0;
+byte[] dataList = { v0, v1, v2, v3 };
 //-------------------------------------------------------------------------------------------------------------------------//
 /*
-*ALTER/PONG V0.3
+*ALTER/PONG V0.4
 *DONE BY EDDY IKHLEF USING PROCESS
 *rules: 
 * player(left) q to move up, w to move down
@@ -36,9 +41,10 @@ public class ALTERPONG extends PApplet {
 //-------------------------------------------------------------------------------------------------------------------------//
 //STARTING VARIABLES
 //version
-String version = "V0.3";
+String version = "V0.4";
 //player 1 & 2 position, only y + score
-int p1, p2, s1, s2;
+int p1, p2;
+byte s1, s2;
 //ball position bx by / ball moves dx dy / ball size bsize
 int bx, by, dx, dy, bsize;
 //ball buffer ordiLuck
@@ -151,11 +157,38 @@ public void launch() {
   //set transition color to black
   color(0);
 }
+
+//LOAD()
+public void load() {
+  //check if save file exist
+  if (data.exists()) {
+    dataList = loadBytes("data.bin");
+  }
+  else {
+    saveBytes("data.bin", dataList);
+  }
+}
+
+//UPDATESCORES()
+public void updateScores() {
+  if (mode == 1) {
+    if (s1 > dataList[0]) { dataList[0] = s1; }
+    if (s2 > dataList[1]) { dataList[1] = s2; }
+  }
+  if (mode == 2) {
+    if (s1 > dataList[2]) { dataList[2] = s1; }
+    if (s2 > dataList[3]) { dataList[3] = s2; }
+  }
+  saveBytes("data.bin", dataList);
+}
+
 //-------------------------------------------------------------------------------------------------------------------------//
 //START TITLE SCREEN
 //-------------------------------------------------------------------------------------------------------------------------//
 //initialize setup
 public void setup() {
+  //Load Scores
+  load();
   //INITIALIZE VARIABLES
   p1 = 360;
   p2 = 360;
@@ -184,7 +217,7 @@ public void setup() {
   strokeWeight(1);
   background(255);
   fill(0);
-  line(640, 0, 640, 1280);
+  line(640, 100, 640, 620);
   fill(50,50,50);
   textAlign(CENTER, CENTER);
   text("ALTER/PONG", 628, 30); 
@@ -194,6 +227,9 @@ public void setup() {
   textSize(50);
   text("<press LEFT ARROW>", 320, 480);
   text("<press RIGHT ARROW>", 960, 480);
+  textSize(25);
+  text("<"+str(dataList[0])+":"+str(dataList[1])+">", 320, 550);
+  text("<"+str(dataList[2])+":"+str(dataList[3])+">", 960, 550);
   fill(0);
   textSize(25);
   text("<"+version+" - 2019 - Eddy Ikhlef>\nm-o-k-a.github.io", 628, 680); 
@@ -216,6 +252,7 @@ public void draw() {
     else {
       ballMove();
       playerMoves();
+      updateScores();
     }
     if (key == 'r') { color(0); clear(); setup(); }
  }

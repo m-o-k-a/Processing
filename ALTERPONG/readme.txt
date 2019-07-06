@@ -1,5 +1,5 @@
 /*
-*ALTER/PONG V0.3
+*ALTER/PONG V0.4
 *DONE BY EDDY IKHLEF USING PROCESS
 *rules: 
 * player(left) q to move up, w to move down
@@ -9,10 +9,6 @@
 *Adding with unstopable platform, and ball who take speed, it make the pong harder than ever !
 */
 
-/*
-*Upcoming in V0.4
-*Highscore saved in local for each game mode
-*/
 /*
 *Upcoming in V0.5
 *Sound Feedback
@@ -52,4 +48,8 @@
 /*
 *V0.3
 *Player 1 vs Computer Mode
+*/
+/*
+*V0.4
+*Highscore saved in local for each game mode
 */
