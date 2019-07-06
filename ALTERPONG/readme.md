@@ -1,57 +1,57 @@
 ![alt text](img/pong0.png)
 ![alt text](img/pong1.png)
 /*
-*ALTER/PONG V0.4
-*DONE BY EDDY IKHLEF USING PROCESS
-*rules: 
-* player(left) q to move up, w to move down
-* player(right) up to move up, down to move down
-* r to stop and go back to title screen (saved scores)
-*ALTERNATIVE PONG, each player can't move after send the ball until the other player touch it
-*Adding with unstopable platform, and ball who take speed, it make the pong harder than ever !
-*/
-
-/*
-*Upcoming in V0.5
-*Sound Feedback
-*/
-/*
-*Upcoming in V0.6
-*Upgrade pseudo-IA system and hitboxes
-*/
-/*
-*Upcoming in V0.7
-*???
-*/
-/*
-*Upcoming in V0.8
-*???
-*/
-/*
-*Upcoming in V0.9
-*???
-*/
-/*
-*Upcoming in V1.0
-*???
-*/
-
-
-/*************************************************************************************************
-*************************************************************************************************/
-/*
-*V0.1
-*Base Game, player 1 vs player 2
-*/
-/*
-*V0.2
-*Title Screen, Reload, Launch Game
-*/
-/*
-*V0.3
-*Player 1 vs Computer Mode
-*/
-/*
-*V0.4
-*Highscore saved in local for each game mode
-*/
+*ALTER/PONG V0.4<br>
+*DONE BY EDDY IKHLEF USING PROCESS<br>
+*rules:<br>
+* player(left) q to move up, w to move down<br>
+* player(right) up to move up, down to move down<br>
+* r to stop and go back to title screen (saved scores)<br>
+*ALTERNATIVE PONG, each player can't move after send the ball until the other player touch it<br>
+*Adding with unstopable platform, and ball who take speed, it make the pong harder than ever !<br>
+*/<br>
+<br>
+/*<br>
+*Upcoming in V0.5<br>
+*Sound Feedback<br>
+*/<br>
+/*<br>
+*Upcoming in V0.6<br>
+*Upgrade pseudo-IA system and hitboxes<br>
+*/<br>
+/*<br>
+*Upcoming in V0.7<br>
+*???<br>
+*/<br>
+/*<br>
+*Upcoming in V0.8<br>
+*???<br>
+*/<br>
+/*<br>
+*Upcoming in V0.9<br>
+*Computer Difficulties<br>
+*/<br>
+/*<br>
+*Upcoming in V1.0<br>
+*???<br>
+*/<br>
+<br>
+<br>
+/*************************************************************************************************<br>
+*************************************************************************************************/<br>
+/*<br>
+*V0.1<br>
+*Base Game, player 1 vs player 2<br><br>
+*/<br>
+/*<br>
+*V0.2<br>
+*Title Screen, Reload, Launch Game<br>
+*/<br>
+/*<br>
+*V0.3<br>
+*Player 1 vs Computer Mode<br>
+*/<br>
+/*<br>
+*V0.4<br>
+*Highscore saved in local for each game mode<br>
+*/<br>
