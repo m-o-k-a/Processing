@@ -1,7 +1,7 @@
 ![alt text](img/pong0.png)
 ![alt text](img/pong1.png)
 <br>
-ALTER/PONG V0.4<br>
+ALTER/PONG V0.5<br>
 DONE BY EDDY IKHLEF USING PROCESS<br>
 rules:<br>
 *player(left) q to move up, w to move down<br>
