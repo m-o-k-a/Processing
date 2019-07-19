@@ -11,9 +11,6 @@ rules:<br>
 ALTERNATIVE PONG, each player can't move after send the ball until the other player touch it<br>
 Adding with unstopable platform, and ball who take speed, it make the pong harder than ever !<br>
 <br>
-*Upcoming in V0.5<br>
-*Sound Feedback<br>
-<br>
 *Upcoming in V0.6<br>
 *Upgrade pseudo-IA system and hitboxes<br>
 <br>
@@ -46,4 +43,7 @@ Adding with unstopable platform, and ball who take speed, it make the pong harde
 <br>
 *V0.4<br>
 *Highscore saved in local for each game mode<br>
+<br>
+*V0.5<br>
+*Sound Feedback<br>
 <br>

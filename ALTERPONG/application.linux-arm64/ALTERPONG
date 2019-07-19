@@ -2,4 +2,4 @@
 
 APPDIR=$(readlink -f "$0")
 APPDIR=$(dirname "$APPDIR")
-java -Djna.nosys=true -Djava.library.path="$APPDIR:$APPDIR/lib" -cp "$APPDIR:$APPDIR/lib/ALTERPONG.jar:$APPDIR/lib/core.jar:$APPDIR/lib/jogl-all.jar:$APPDIR/lib/gluegen-rt.jar:$APPDIR/lib/jogl-all-natives-linux-aarch64.jar:$APPDIR/lib/gluegen-rt-natives-linux-aarch64.jar" ALTERPONG "$@"
+java -Djna.nosys=true -Djava.library.path="$APPDIR:$APPDIR/lib" -cp "$APPDIR:$APPDIR/lib/ALTERPONG.jar:$APPDIR/lib/core.jar:$APPDIR/lib/jogl-all.jar:$APPDIR/lib/gluegen-rt.jar:$APPDIR/lib/jogl-all-natives-linux-aarch64.jar:$APPDIR/lib/gluegen-rt-natives-linux-aarch64.jar:$APPDIR/lib/javamp3-1.0.4.jar:$APPDIR/lib/jsyn-20171016.jar:$APPDIR/lib/sound.jar" ALTERPONG "$@"

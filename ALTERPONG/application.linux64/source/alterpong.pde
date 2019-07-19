@@ -2,14 +2,17 @@
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import processing.sound.*;
 //Load Scores
 File data = new File("data.bin");
 //value 0, 1 for player score in solo mode, 2 and 3 for the two player mode
 byte v0, v1, v2, v3 = 0;
 byte[] dataList = { v0, v1, v2, v3 };
+//Load Sounds
+SoundFile sndGetPoints, sndHitPad, sndHitWall;
 //-------------------------------------------------------------------------------------------------------------------------//
 /*
-*ALTER/PONG V0.4
+*ALTER/PONG V0.5
 *DONE BY EDDY IKHLEF USING PROCESS
 *rules: 
 * player(left) q to move up, w to move down
@@ -21,7 +24,7 @@ byte[] dataList = { v0, v1, v2, v3 };
 //-------------------------------------------------------------------------------------------------------------------------//
 //STARTING VARIABLES
 //version
-String version = "V0.4";
+String version = "V0.5";
 //player 1 & 2 position, only y + score
 int p1, p2;
 byte s1, s2;
@@ -44,16 +47,18 @@ void checkColission() {
   if ((bx > 16 && bx <= 26-dx) && (by > p1-8 && by < p1+100 && canHit == true)) {
     canHit = false;
     dx = bufferBase;
+    sndHitPad.play();
   }
   if ((bx > 1280-26 && bx <= 1280-18+dx) && (by > p2-8 && by < p2+100 && canHit == true)) {
     canHit = false;
     dx = -bufferBase;
+    sndHitPad.play();
   }
   
   //collision with border
-  if (bx < bsize && canHit == true)  { canHit = false; dx = bufferBase; buffer = 0; ballMove(); s2++;}  
-  else if (bx > 1280-bsize && canHit == true)  { canHit = false; dx = -bufferBase; buffer = 0; ballMove(); s1++;}  
-  if (by < bsize || by > 719-bsize)  { dy = -dy; buffer++; }
+  if (bx < bsize && canHit == true)  { canHit = false; dx = bufferBase; buffer = 0; ballMove(); s2++; sndGetPoints.play(); }  
+  else if (bx > 1280-bsize && canHit == true)  { canHit = false; dx = -bufferBase; buffer = 0; ballMove(); s1++;sndGetPoints.play(); }  
+  if (by < bsize || by > 719-bsize)  { dy = -dy; buffer++; sndHitWall.play(); }
 }
 
 //BALLMOVE() - Move the ball and bounce on edge, check when it is in the "goal zone" and change speed
@@ -94,11 +99,11 @@ void playerMoves() {
   else if (mode == 1 && dx > 0) { //ONLY P1 VERSION
     fill(255);
     //not cheated move
-    if (int(random(0,25)) >= ordiLuck) {
-      if (p2 > by) {
+    if (int(random(0,random(20,25))) >= ordiLuck) {
+      if (p2+50 > by) {
         robot.keyPress(KeyEvent.VK_UP);
       }
-      if (p2 <= by) {
+      if (p2+50 <= by) {
         robot.keyPress(KeyEvent.VK_DOWN);
       }
     }
@@ -167,6 +172,10 @@ void updateScores() {
 //-------------------------------------------------------------------------------------------------------------------------//
 //initialize setup
 void setup() {
+  //Load Sounds
+  sndGetPoints = new SoundFile(this, "audio/getPoint.mp3");
+  sndHitPad = new SoundFile(this, "audio/hitPad.mp3");
+  sndHitWall = new SoundFile(this, "audio/hitWall.mp3");
   //Load Scores
   load();
   //INITIALIZE VARIABLES
@@ -213,6 +222,9 @@ void setup() {
   fill(0);
   textSize(25);
   text("<"+version+" - 2019 - Eddy Ikhlef>\nm-o-k-a.github.io", 628, 680); 
+  color(0,0,0);
+  fill(0,0,0);
+  line(640, 100, 640, 620); 
 }
 
 //-------------------------------------------------------------------------------------------------------------------------//
@@ -234,7 +246,7 @@ void draw() {
       playerMoves();
       updateScores();
     }
-    if (key == 'r') { color(0); clear(); setup(); }
+    if (key == 'r') { setup(); }
  }
  else {
    //title screen select
