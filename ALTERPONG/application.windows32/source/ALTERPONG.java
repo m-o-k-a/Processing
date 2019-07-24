@@ -31,9 +31,11 @@ byte v0, v1, v2, v3 = 0;
 byte[] dataList = { v0, v1, v2, v3 };
 //Load Sounds
 SoundFile sndGetPoints, sndHitPad, sndHitWall;
+//load background img
+PImage bkg;
 //-------------------------------------------------------------------------------------------------------------------------//
 /*
-*ALTER/PONG V0.5
+*ALTER/PONG V0.7
 *DONE BY EDDY IKHLEF USING PROCESS
 *rules: 
 * player(left) q to move up, w to move down
@@ -45,7 +47,7 @@ SoundFile sndGetPoints, sndHitPad, sndHitWall;
 //-------------------------------------------------------------------------------------------------------------------------//
 //STARTING VARIABLES
 //version
-String version = "V0.5";
+String version = "V0.7";
 //player 1 & 2 position, only y + score
 int p1, p2;
 byte s1, s2;
@@ -120,11 +122,11 @@ public void playerMoves() {
   else if (mode == 1 && dx > 0) { //ONLY P1 VERSION
     fill(255);
     //not cheated move
-    if (PApplet.parseInt(random(0,random(20,25))) >= ordiLuck) {
-      if (p2+50 > by) {
+    if (PApplet.parseInt(random(ordiLuck, 100)-ordiLuck) >= ordiLuck) {
+      if (p2 > by && p2+100 > by ) {
         robot.keyPress(KeyEvent.VK_UP);
       }
-      if (p2+50 <= by) {
+      if (p2 < by && p2+100 < by) {
         robot.keyPress(KeyEvent.VK_DOWN);
       }
     }
@@ -150,7 +152,7 @@ public void drawScore() {
 
 //CLEAN() - Clean the screen function
 public void clean() {
- background(0); 
+ background(bkg);
  //draw the separator line
  stroke(255,255,255);
  line(640, 0, 640, 1280);
@@ -197,6 +199,9 @@ public void setup() {
   sndGetPoints = new SoundFile(this, "audio/getPoint.mp3");
   sndHitPad = new SoundFile(this, "audio/hitPad.mp3");
   sndHitWall = new SoundFile(this, "audio/hitWall.mp3");
+  //select a background
+  String loadimage = "bkg/bkg"+str(PApplet.parseInt(random(0,4)))+".jpg";
+  bkg = loadImage(loadimage);
   //Load Scores
   load();
   //INITIALIZE VARIABLES
@@ -225,7 +230,7 @@ public void setup() {
   //draw text
   textSize(100);
   strokeWeight(1);
-  background(255);
+  background(bkg);
   fill(0);
   line(640, 100, 640, 620);
   fill(50,50,50);
@@ -252,6 +257,7 @@ public void setup() {
 //MAIN LOOP: DRAW THE GAME
 //-------------------------------------------------------------------------------------------------------------------------//
 public void draw() {
+  //draw background
   if (start == true && mode >= 0) {
     strokeWeight(1);
     clean();

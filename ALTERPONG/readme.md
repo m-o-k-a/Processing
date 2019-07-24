@@ -1,7 +1,7 @@
 ![alt text](img/pong0.png)
 ![alt text](img/pong1.png)
 <br>
-ALTER/PONG V0.5<br>
+ALTER/PONG V0.7<br>
 DONE BY EDDY IKHLEF USING PROCESS<br>
 rules:<br>
 *player(left) q to move up, w to move down<br>
@@ -10,12 +10,6 @@ rules:<br>
 <br>
 ALTERNATIVE PONG, each player can't move after send the ball until the other player touch it<br>
 Adding with unstopable platform, and ball who take speed, it make the pong harder than ever !<br>
-<br>
-*Upcoming in V0.6<br>
-*Upgrade pseudo-IA system and hitboxes<br>
-<br>
-*Upcoming in V0.7<br>
-*???<br>
 <br>
 *Upcoming in V0.8<br>
 *???<br>
@@ -46,4 +40,10 @@ Adding with unstopable platform, and ball who take speed, it make the pong harde
 <br>
 *V0.5<br>
 *Sound Feedback<br>
+<br>
+*V0.6<br>
+*Upgrade pseudo-IA system and hitboxes<br>
+<br>
+*V0.7<br>
+*Added Backgrounds<br>
 <br>
